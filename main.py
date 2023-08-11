@@ -39,6 +39,18 @@ def read_item(item_id: int, q: Union[str, None] = None):
 @app.post("/items/")
 async def create_item(request: Request):
     data = await request.json()
+    
+    # Check if there is a repeated "chest" value in values.txt file
+    if "chest" in data:
+        with open("values.txt", "r") as f:
+            items = [json.loads(line) for line in f.readlines()]
+        chest_count = 0
+        for item in items:
+            if "chest" in item:
+                chest_count += 1
+        if chest_count > 0:
+            data["chest" + str(chest_count + 1)] = data.pop("chest")
+    
     # Write item to values.txt file
     with open("values.txt", "a") as f:
         f.write(json.dumps(data) + "\n")
