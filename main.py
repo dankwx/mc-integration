@@ -33,17 +33,33 @@ def read_items():
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+    # Read items from values.txt file
+    with open("values.txt", "r") as f:
+        items = [json.loads(line) for line in f.readlines()]
+    
+    # Find item with matching ID
+    for item in items:
+        if str(item.get("id")) == str(item_id):
+            return item
+    
+    return {"message": "Item not found"}
 
 
 @app.post("/items/")
 async def create_item(request: Request):
     data = await request.json()
     
+    # Generate and assign unique ID to item
+    with open("values.txt", "r") as f:
+        items = [json.loads(line) for line in f.readlines()]
+    max_id = 0
+    for item in items:
+        if "id" in item and item["id"] > max_id:
+            max_id = item["id"]
+    data["id"] = max_id + 1
+    
     # Check if there is a repeated "chest" value in values.txt file
     if "chest" in data:
-        with open("values.txt", "r") as f:
-            items = [json.loads(line) for line in f.readlines()]
         chest_count = 0
         for item in items:
             for key in item.keys():
