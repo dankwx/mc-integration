@@ -46,10 +46,10 @@ async def create_item(request: Request):
             items = [json.loads(line) for line in f.readlines()]
         chest_count = 0
         for item in items:
-            if "chest" in item:
-                chest_count += 1
-        if chest_count > 0:
-            data["chest" + str(chest_count + 1)] = data.pop("chest")
+            for key in item.keys():
+                if key.startswith("chest"):
+                    chest_count += 1
+        data["chest" + str(chest_count + 1)] = data.pop("chest")
     
     # Write item to values.txt file
     with open("values.txt", "a") as f:
