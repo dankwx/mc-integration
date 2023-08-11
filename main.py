@@ -55,3 +55,29 @@ async def create_item(request: Request):
     with open("values.txt", "a") as f:
         f.write(json.dumps(data) + "\n")
     return {"data": data}
+
+
+@app.delete("/items/{item_id}")
+def delete_item(item_id: int):
+    # Read items from values.txt file
+    with open("values.txt", "r") as f:
+        items = [json.loads(line) for line in f.readlines()]
+    
+    # Find and delete item with matching ID
+    item_found = False
+    new_items = []
+    for item in items:
+        if str(item.get("id")) == str(item_id):
+            item_found = True
+        else:
+            new_items.append(item)
+    
+    # Write updated items to values.txt file
+    with open("values.txt", "w") as f:
+        for item in new_items:
+            f.write(json.dumps(item) + "\n")
+    
+    if item_found:
+        return {"message": "Item deleted successfully"}
+    else:
+        return {"message": "Item not found"}
