@@ -1,2 +1,1 @@
-{"chests": {"objeto1": "espada", "objeto2": "pote"}}
-{"chest": {"objeto1": "espada", "objeto2": "pote"}}
+
