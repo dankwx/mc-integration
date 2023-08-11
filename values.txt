@@ -1,2 +1,2 @@
 {"id":1,"chest": {"objeto1": "espada", "objeto2": "pote"}}
-{"id":1,"chest2":{"objeto3":"minecraft:flint_and_steel","objeto1":"minecraft:egg","objeto2":"minecraft:golden_apple"}}
+{"id":2,"chest2":{"objeto3":"minecraft:flint_and_steel","objeto1":"minecraft:egg","objeto2":"minecraft:golden_apple"}}
