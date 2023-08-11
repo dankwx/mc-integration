@@ -58,18 +58,23 @@ async def create_item(request: Request):
             max_id = item["id"]
     data["id"] = max_id + 1
     
-    # Check if there is a repeated "chest" value in values.txt file
-    if "chest" in data:
-        chest_count = 0
-        for item in items:
-            for key in item.keys():
-                if key.startswith("chest"):
-                    chest_count += 1
-        data["chest" + str(chest_count + 1)] = data.pop("chest")
+    # Check if there is an existing item with the same name and replace its values
+    item_found = False
+    new_items = []
+    for item in items:
+        if "chest" in data and "chest" in item:
+            item["chest"] = data["chest"]
+            item_found = True
+        new_items.append(item)
     
-    # Write item to values.txt file
-    with open("values.txt", "a") as f:
-        f.write(json.dumps(data) + "\n")
+    if not item_found:
+        new_items.append(data)
+    
+    # Write updated items to values.txt file
+    with open("values.txt", "w") as f:
+        for item in new_items:
+            f.write(json.dumps(item) + "\n")
+    
     return {"data": data}
 
 
